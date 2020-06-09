@@ -8,6 +8,7 @@ import http.client, urllib
 import subprocess
 from pathlib import Path
 import pandas as pd
+from distutils.dir_util import copy_tree, copyfile
 
 class ColabHelper:
   """ Class useful to improved Colab capabilities"""
@@ -61,14 +62,8 @@ class ColabHelper:
   @staticmethod
   def _copy_folder_content(source, target):
     """ Private method used to copy from a source to a target folder"""
-
-    if not os.path.isdir(target):
-      os.mkdir(target)
-    # Create the smart pth for copy command. We want to copy all the folder content.
-    if not source.endswith("/"):
-      source += "/"
-
-    subprocess.run(["cp", "-af", "'"+source+"'*", "'"+target+"'"]) # v for verbose
+    
+    return len(copy_tree(source, "./f")) > 1
 
   @staticmethod
   def _copy_file(source, target):
@@ -77,7 +72,7 @@ class ColabHelper:
     target_fpath = Path(target)
     if not os.path.isdir(target_fpath.parent):
       os.mkdir(target_fpath.parent)
-    subprocess.run(["cp", "-af", "'"+source+"'", "'"+target+"'"]) # v for verbose
+    copyfile(source, target)
 
   def tensorboard_backup(self, tensorboard_logdir="runs"):
     """Make a backup of the log dir used by tensorboard given as input to 
