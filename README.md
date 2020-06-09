@@ -24,7 +24,6 @@ ch = ColabHelper(tensorboard_backup_p="/content/drive/My Drive/<YOUR_CUSTOM_FOLD
 
 ch.tensorboard_backup(tensorboard_logdir="./runs/")
 ch.tensorboard_restore(tensorboard_logdir="./runs/")
-ch.notify(extra="Backup Restore")
 ```
 ## Generate sound notification
 ```python
