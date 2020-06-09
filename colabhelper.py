@@ -6,19 +6,26 @@ import time
 import requests
 import http.client, urllib
 import subprocess
+from pathlib import Path
+import pandas as pd
 
 class ColabHelper:
   """ Class useful to improved Colab capabilities"""
 
-  def __init__(self, model_state_p=None, tensorboard_backup_p="/content/drive/My Drive/MLDS/runsBackup/"):
+  def __init__(self, model_state_p=None, backup_folder="/content/drive/My Drive/ColabHelper/"):
     
-    self.tensorboard_backup_p = tensorboard_backup_p
+    tensorboard_logs_folder = "runs"
+    dataframes_folder = "dataframes"
+    self.backup_folder = backup_folder
+    self.tensorboard_backup_p = os.path.join(backup_folder, tensorboard_logs_folder)
+    self.dataframes_backup_p = os.path.join(backup_folder, dataframes_folder)
+
     # Load gdrive
     drive.mount('/content/drive/')
-    if not os.path.isdir(tensorboard_backup_p):
-      print("[INFO] Your backup folder {} doesnt exist", tensorboard_backup_p)
+    if not os.path.isdir(self.tensorboard_backup_p):
+      print("[INFO] Your backup folder ", self.tensorboard_backup_p," doesnt exist")
     else:
-      print("[WARN] Your backup folder {} already exists. Some files can be overwritten", tensorboard_backup_p)
+      print("[WARN] Your backup folder {} already exists. Some files can be overwritten", self.tensorboard_backup_p)
   
   def set_notification_params(self, service="pushover", params={}):
     if service == "pushover":
@@ -33,14 +40,22 @@ class ColabHelper:
     self.params = params
 
 
-  def set_tensorboard_backup_p(self, tensorboard_backup_p):
-    """Set the GDRIVE path where the backup already is or (if the first time) will be saved."""
+  def set_tensorboard_backup_folder_name(self, tensorboard_logs_folder = "runs"):
+    """Manually set the GDRIVE path where the backup already is or (if the first time) will be saved.
+        Note the final path is given by <self.backup_folder>/runsBackup/
+    """
     
-    self.tensorboard_backup_p = tensorboard_backup_p
+    self.tensorboard_backup_p = os.path.join(self.backup_folder,tensorboard_logs_folder)
+  
+  def set_backup_folder(self, backup_folder):
+    """Set the backup path where the backup already is or (if the first time) will be saved."""
+    
+    self.backup_folder = backup_folder
+
 
   @staticmethod
   def _copy_folder_content(source, target):
-    """ Private method used to execute copy from a source to a target folder"""
+    """ Private method used to copy from a source to a target folder"""
 
     if not os.path.isdir(target):
       os.mkdir(target)
@@ -49,6 +64,15 @@ class ColabHelper:
       source += "/"
 
     subprocess.run(["cp", "-af", source+"*", target]) # v for verbose
+
+  @staticmethod
+  def _copy_file(source, target):
+    """ Private method used to copy a file"""
+
+    target_fpath = Path(target)
+    if not os.path.isdir(target_fpath.parent):
+      os.mkdir(target_fpath.parent)
+    subprocess.run(["cp", "-af", source, target]) # v for verbose
 
   def tensorboard_backup(self, tensorboard_logdir="./runs/"):
     """Make a backup of the log dir used by tensorboard given as input to 
@@ -127,10 +151,45 @@ class ColabHelper:
         raise ColabHelperException("You need to set the parameters of the service as first. Use set_notification_params method for that.")
       self._pushover_send_msg(message)
     
-  # TODO: Sync?notify?use just requests? Use more third parties service like telegram, browser notification?
+  def backup_dataframe(self, df, name):
+    """Save a local and remote copy of the input dataframe.
+    Creates the folder if it doesnt exist.
+
+    param:
+    name (str): the name of the data to be saved. This will be the filename of pkl.
+    folder_path (str | os.path): the backup folder for the dataframes"""
+
+    local_path="./dataframes/"
+    if not os.path.isdir(local_path):
+      os.mkdir("dataframes")
+    local_backup = os.path.join(local_path, name+".pkl")
+    df.to_pickle(local_backup)
+    remote_backup = os.path.join(self.dataframes_backup_p, name+".pkl")
+    self._copy_file(local_backup, remote_backup)
+    #, remote_path="/content/drive/My Drive/dataframes", local_path="./dataframes/"
+
+
+  def restore_dataframe(self, name):
+    """Restore a remote copy of the input dataframe.
+    Creates the folder if it doesnt exist.
+
+    param:
+    name (str): the name of the data to be saved. This will be the filename of pkl.
+    folder_path (str | os.path): the backup folder for the dataframes"""
+
+    local_path="./dataframes/"
+    if not os.path.isdir(local_path):
+      os.mkdir("dataframes")
+    local_backup = os.path.join(local_path, name+".pkl")
+    remote_backup = os.path.join(self.dataframes_backup_p, name+".pkl")
+    self._copy_file(remote_backup, local_backup)
+    return pd.read_pickle(local_backup)
+
+    # TODO: Sync?notify?use just requests? Use more third parties service like telegram, browser notification?
 
 class ColabHelperException(Exception):
   pass
 
 class ColabHelperAuthenticationException(ColabHelperException):
   pass
+
