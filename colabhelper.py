@@ -11,6 +11,8 @@ import pandas as pd
 from distutils.dir_util import copy_tree
 from shutil import copyfile
 
+import functools
+
 class ColabHelper:
   """ Class useful to improved Colab capabilities"""
 
@@ -188,6 +190,21 @@ class ColabHelper:
 
     # TODO: Sync?notify?use just requests? Use more third parties service like telegram, browser notification?
 
+    
+# Define @timeme decorator
+def timeme(func):
+  """Print the runtime of the decorated function"""
+  
+  @functools.wraps(func)
+  def wrapper_timer(*args, **kwargs):
+      start_time = time.perf_counter()
+      value = func(*args, **kwargs)
+      end_time = time.perf_counter()
+      run_time = end_time - start_time
+      print(f"Execution finished {func.__name__!r} in {run_time:.4f} secs")
+      return value
+  return wrapper_timer #  no "()" here, return obj
+  
 class ColabHelperException(Exception):
   pass
 
