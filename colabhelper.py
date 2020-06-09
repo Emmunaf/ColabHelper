@@ -68,7 +68,7 @@ class ColabHelper:
     if not source.endswith("/"):
       source += "/"
 
-    subprocess.run(["cp", "-af", "'"+source+"*"+"'", "'"+target+"'"]) # v for verbose
+    subprocess.run(["cp", "-af", "'"+source+"'*", "'"+target+"'"]) # v for verbose
 
   @staticmethod
   def _copy_file(source, target):
