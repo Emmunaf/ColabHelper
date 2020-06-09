@@ -33,7 +33,7 @@ ch = ColabHelper()
 ch.beep(times=3)
 ```
 
-## Generate a push notification with third party services
+## Send a push notification by using third party services
 ```python
 ch = ColabHelper()
 
