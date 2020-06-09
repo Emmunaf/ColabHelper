@@ -5,11 +5,12 @@ import os
 import time
 import requests
 import http.client, urllib
+import subprocess
 
 class ColabHelper:
   """ Class useful to improved Colab capabilities"""
 
-  def __init__(self, model_state_p=None, tensorboard_backup_p="/content/drive/My Drive/MLDS/runlog2/"):
+  def __init__(self, model_state_p=None, tensorboard_backup_p="/content/drive/My Drive/MLDS/runsBackup/"):
     
     self.tensorboard_backup_p = tensorboard_backup_p
     # Load gdrive
@@ -32,16 +33,22 @@ class ColabHelper:
     self.params = params
 
 
+  def set_tensorboard_backup_p(self, tensorboard_backup_p):
+    """Set the GDRIVE path where the backup already is or (if the first time) will be saved."""
+    
+    self.tensorboard_backup_p = tensorboard_backup_p
+
   @staticmethod
   def _copy_folder_content(source, target):
     """ Private method used to execute copy from a source to a target folder"""
 
     if not os.path.isdir(target):
-      !mkdir $target
+      os.mkdir(target)
     # Create the smart pth for copy command. We want to copy all the folder content.
     if not source.endswith("/"):
       source += "/"
-    !cp -af '$source'* '$target'   # v for verbose debug
+
+    subprocess.run(["cp", "-af", source+"*", target]) # v for verbose
 
   def tensorboard_backup(self, tensorboard_logdir="./runs/"):
     """Make a backup of the log dir used by tensorboard given as input to 
@@ -63,24 +70,26 @@ class ColabHelper:
       time.sleep(2)
 
   @staticmethod
-  def get_free_ram():
-    """ Print RAM usage info"""
-    !free -m
+  def get_ram_usage():
+    """ Print RAM usage info (free -m)"""
+    print(subprocess.Popen("free -m", shell=True, stdout=subprocess.PIPE).stdout.read().decode())
   
   @staticmethod
   def get_hdd_usage():
-    """ Print HDD usage info"""
-    !df -h
+    """ Print HDD usage info (!df -h)"""
+    print(subprocess.Popen("df -h", shell=True, stdout=subprocess.PIPE).stdout.read().decode())
+    
   
   @staticmethod
   def get_gpu_info():
-    """ Print GPU model and usage info"""
-    !nvidia-smi
+    """ Print GPU model and usage info (!nvidia-smi)"""
+    print(subprocess.Popen("nvidia-smi", shell=True, stdout=subprocess.PIPE).stdout.read().decode())
+
 
   @staticmethod
   def get_cpu_info():
-    """ Print CPU model"""
-    !cat /proc/cpuinfo
+    """ Print CPU model (!cat /proc/cpuinfo)"""
+    print(subprocess.Popen("cat /proc/cpuinfo", shell=True, stdout=subprocess.PIPE).stdout.read().decode())
   
   def _pushover_send_msg(self, message):
     conn = http.client.HTTPSConnection("api.pushover.net:443")
