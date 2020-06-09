@@ -1,5 +1,6 @@
 # ColabHelper
-A wrapper useful to work with colab or Jupiter notebook in general.
+A wrapper useful to work with Colab, but some of the methods like pushover notification should work on any jupyter notebook.
+The module contains some utilities for an improved experience with Colab, like persistency of tensoboard log or dataframes by using your free google drive, encapsulated in the ColabHelper class.
 
 # Features
 As of now the module is able to help in the following scenarios:
