@@ -96,3 +96,13 @@ ch = ColabHelper()
 a_restored = ch.restore_dataframe("a_dump")
 ```
 The dataframes are saved in a subfolder of *<backup_folder>* called *dataframes*.
+
+## Export a pandas dataframe to a google sheet
+You can also export a dataframe to a google sheet.
+
+**Note**: If you think that the generated sheet is blank, **look at the worksheet with the same name as the sheet**. 
+Usually the first one is the blank one generated at creation time.
+```python
+a = pandas.DataFrame({"a":[1,2,3,4]})
+ch.export_dataframe_to_gsheet(a, "Test_a_dataframe")
+```
