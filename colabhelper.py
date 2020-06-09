@@ -19,10 +19,7 @@ class ColabHelper:
     self.backup_folder = backup_folder
     self.tensorboard_backup_p = os.path.join(backup_folder, tensorboard_logs_folder)
     self.dataframes_backup_p = os.path.join(backup_folder, dataframes_folder)
-    if not os.path.isdir(backup_folder):
-      os.mkdir(backup_folder)
-      print("[INFO] Your backup folder ", self.tensorboard_backup_p," doesnt exist")
-      
+
     # Load gdrive
     drive.mount('/content/drive/')
     if not os.path.isdir(self.backup_folder):
