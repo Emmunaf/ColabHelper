@@ -8,7 +8,8 @@ import http.client, urllib
 import subprocess
 from pathlib import Path
 import pandas as pd
-from distutils.dir_util import copy_tree, copyfile
+from distutils.dir_util import copy_tree
+from shutil import copyfile
 
 class ColabHelper:
   """ Class useful to improved Colab capabilities"""
