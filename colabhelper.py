@@ -84,7 +84,7 @@ class ColabHelper:
   def tensorboard_restore(self, tensorboard_logdir="runs"):
     """Restore a backup of the log dir tensorboard into the given path from 
       the gdrive folder tensorboard_backup_p folder"""
-    print("[INFO] To start tensorboard you can execute the following 2 lines:\n\%load_ext tensorboard\n\%tensorboard --logdir ",tensorboard_logdir)
+    print("[INFO] To start tensorboard you can execute the following 2 lines:\n%load_ext tensorboard\n%tensorboard --logdir ",tensorboard_logdir)
     self._copy_folder_content(self.tensorboard_backup_p, tensorboard_logdir)
   
   @staticmethod
