@@ -9,9 +9,19 @@ As of now the class is able to help in the following scenario:
 - Get a custom notification on pushbullet (in future maybe other services) useful to have some sort of notification also when away from PC
 
 # Usage
+## Import module on colab notebook
+```python
+import os
+if not os.path.isdir('./ColabHelper'):
+  !git clone https://github.com/Emmunaf/ColabHelper.git
+  
+from ColabHelper.colabhelper import ColabHelper
+```
+
 ## Tensorboard easy backup/restor from Google Drive
 ```python
 ch = ColabHelper(tensorboard_backup_p="/content/drive/My Drive/<YOUR_CUSTOM_FOLDER_IN_DRIVE>")
+
 ch.tensorboard_backup(tensorboard_logdir="./runs/")
 ch.tensorboard_restore(tensorboard_logdir="./runs/")
 ch.notify(extra="Backup Restore")
@@ -19,6 +29,7 @@ ch.notify(extra="Backup Restore")
 ## Generate sound notification
 ```python
 ch = ColabHelper()
+
 # Play a beep 3 times (default is 2)
 ch.beep(times=3)
 ```
