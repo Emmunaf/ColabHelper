@@ -3,10 +3,10 @@ A wrapper useful to work with colab or Jupiter notebook in general.
 
 # Features
 As of now the module is able to help in the following scenarios:
-- Easily backup/restore the tensorboard log dir to your google drive
+- Easily backup/restore the tensorboard log directory to your google drive
 - Get information about the hosting machine (CPU, RAM, HDD, GPU)
 - Play a sound notification to alert you when a job is done
-- Get a custom notification on pushbullet (in future maybe other services) useful to have some sort of notification also when away from PC
+- Get a custom notification with your [Pushover](https://pushover.net/) API (in future could be nice to support other services) useful to have some sort of notification also when you are away from PC.
 
 # Usage
 ## Import module on colab notebook
@@ -29,7 +29,7 @@ ch.tensorboard_backup()
 # or, if you want to specify a different logdir directory:
 # ch.tensorboard_backup(tensorboard_logdir="./runs/")
 # tensorboard_logdir is the log folder used by the colab istance of tensorboard. 
-# Keep in mind that this correspond to --logdir option specified when starting tensorboard.
+# Keep in mind that this correspond to --logdir option specified when starting tensorboard (usually logs or runs).
 ```
 And to restore:
 ```python
@@ -93,4 +93,4 @@ ch = ColabHelper()
 
 a_restored = ch.restore_dataframe("a_dump")
 ```
-The dataframes are saved in a subfolder of *backup_folder* called *dataframes*.
+The dataframes are saved in a subfolder of *<backup_folder>* called *dataframes*.
