@@ -2,7 +2,7 @@
 A wrapper useful to work with colab or Jupiter notebook in general.
 
 # Features
-As of now the class is able to help in the following scenario:
+As of now the module is able to help in the following scenarios:
 - Easily backup/restore the tensorboard log dir to your google drive
 - Get information about the hosting machine (CPU, RAM, HDD, GPU)
 - Play a sound notification to alert you when a job is done
@@ -85,7 +85,7 @@ a = pandas.DataFrame({"a":[1,2,3,4]})
 ch.backup_dataframe(a, "a_dump")
 
 ```
-Then, to restore your saved dataframe:
+Then, to restore your saved dataframe you can just use:
 ```python
 import pandas
 
