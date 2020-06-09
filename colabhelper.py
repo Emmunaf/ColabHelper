@@ -28,9 +28,9 @@ class ColabHelper:
     else:
       print("[WARN] Your backup folder", self.backup_folder, "already exists. Some files could be overwritten")
       if os.path.isdir(self.tensorboard_backup_p):
-        print("[INFO] A tensorboard backup folder was detected (", self.backup_folder, ")\nYou can use the tensorboard_restore() method to load it.")
-      if os.path.isdir(self.tensorboard_backup_p):
-        print("[INFO] A Dataframe backup folder was detected (", self.backup_folder, ")\nYou can use the restore_dataframe(name) method to load a dataframe of a given name.")
+        print("[INFO] A tensorboard backup folder was detected (", self.tensorboard_backup_p, ")\nYou can use the tensorboard_restore() method to load it.")
+      if os.path.isdir(self.dataframes_backup_p):
+        print("[INFO] A Dataframe backup folder was detected (", self.dataframes_backup_p, ")\nYou can use loaded_df = restore_dataframe(name) method to load a dataframe of a given name.")
   
   def set_notification_params(self, service="pushover", params={}):
     if service == "pushover":
