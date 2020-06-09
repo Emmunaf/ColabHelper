@@ -64,7 +64,7 @@ class ColabHelper:
   def _copy_folder_content(source, target):
     """ Private method used to copy from a source to a target folder"""
     
-    return len(copy_tree(source, "./f")) > 1
+    return len(copy_tree(source, target)) > 1
 
   @staticmethod
   def _copy_file(source, target):
