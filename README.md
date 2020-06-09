@@ -19,12 +19,30 @@ from ColabHelper.colabhelper import ColabHelper
 ```
 
 ## Tensorboard easy backup/restore to/from Google Drive
+To make a backup you can use the following snippet:
 ```python
-ch = ColabHelper(tensorboard_backup_p="/content/drive/My Drive/<YOUR_CUSTOM_FOLDER_IN_DRIVE>")
+ch = ColabHelper(backup_folder="/content/drive/My Drive/MyProjectFolder/")
+# or just use ch = ColabHelper() and the default folder named ColabHelper will be used.
 
-ch.tensorboard_backup(tensorboard_logdir="./runs/")
-ch.tensorboard_restore(tensorboard_logdir="./runs/")
+ch.tensorboard_backup()
+
+# or, if you want to specify a different logdir directory:
+# ch.tensorboard_backup(tensorboard_logdir="./runs/")
+# tensorboard_logdir is the log folder used by the colab istance of tensorboard. 
+# Keep in mind that this correspond to --logdir option specified when starting tensorboard.
 ```
+And to restore:
+```python
+ch = ColabHelper(backup_folder="/content/drive/My Drive/MyProjectFolder/")
+# or just use ch = ColabHelper() and the default folder named ColabHelper will be used.
+
+ch.tensorboard_restore()
+# or you can use the following if you have choosen a different name
+# ch.tensorboard_restore(tensorboard_logdir="./runs/")
+```
+The logs are saved in a subfolder of *backup_folder* called by default *runs*.
+You can change this bahaviour and set a custom subfolder name by calling set_tensorboard_backup_folder_name(newname).
+BTW this is not suggested, when you have many files a better idea is to change *backup_folder* for each new project and then mantaining the same internal structure.
 ## Generate sound notification
 ```python
 ch = ColabHelper()
@@ -55,3 +73,24 @@ ch.get_gpu_info()
 ch.get_hdd_usage()
 ch.get_ram_usage()
 ```
+
+## Save (both local and remote) a copy of a dataframe and restore it
+```python
+import pandas
+
+ch = ColabHelper()
+
+# Get some working dataframes
+a = pandas.DataFrame({"a":[1,2,3,4]})
+ch.backup_dataframe(a, "a_dump")
+
+```
+Then, to restore your saved dataframe:
+```python
+import pandas
+
+ch = ColabHelper()
+
+a_restored = ch.restore_dataframe("a_dump")
+```
+The dataframes are saved in a subfolder of *backup_folder* called *dataframes*.
