@@ -68,7 +68,7 @@ class ColabHelper:
     if not source.endswith("/"):
       source += "/"
 
-    subprocess.run(["cp", "-af", source+"*", target]) # v for verbose
+    subprocess.run(["cp", "-af", "'"+source+"*"+"'", "'"+target+"'"]) # v for verbose
 
   @staticmethod
   def _copy_file(source, target):
@@ -77,7 +77,7 @@ class ColabHelper:
     target_fpath = Path(target)
     if not os.path.isdir(target_fpath.parent):
       os.mkdir(target_fpath.parent)
-    subprocess.run(["cp", "-af", source, target]) # v for verbose
+    subprocess.run(["cp", "-af", "'"+source+"'", "'"+target+"'"]) # v for verbose
 
   def tensorboard_backup(self, tensorboard_logdir="runs"):
     """Make a backup of the log dir used by tensorboard given as input to 
