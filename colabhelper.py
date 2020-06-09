@@ -19,13 +19,21 @@ class ColabHelper:
     self.backup_folder = backup_folder
     self.tensorboard_backup_p = os.path.join(backup_folder, tensorboard_logs_folder)
     self.dataframes_backup_p = os.path.join(backup_folder, dataframes_folder)
-
+    if not os.path.isdir(backup_folder):
+      os.mkdir(backup_folder)
+      print("[INFO] Your backup folder ", self.tensorboard_backup_p," doesnt exist")
+      
     # Load gdrive
     drive.mount('/content/drive/')
-    if not os.path.isdir(self.tensorboard_backup_p):
-      print("[INFO] Your backup folder ", self.tensorboard_backup_p," doesnt exist")
+    if not os.path.isdir(self.backup_folder):
+      os.mkdir(self.backup_folder)
+      print("[INFO] Your backup folder ", self.backup_folder," didn't existed and *it was created* ")
     else:
-      print("[WARN] Your backup folder {} already exists. Some files can be overwritten", self.tensorboard_backup_p)
+      print("[WARN] Your backup folder", self.backup_folder, "already exists. Some files could be overwritten")
+      if os.path.isdir(self.tensorboard_backup_p):
+        print("[INFO] A tensorboard backup folder was detected (", self.backup_folder, ")\nYou can use the tensorboard_restore() method to load it.")
+      if os.path.isdir(self.tensorboard_backup_p):
+        print("[INFO] A Dataframe backup folder was detected (", self.backup_folder, ")\nYou can use the restore_dataframe(name) method to load a dataframe of a given name.")
   
   def set_notification_params(self, service="pushover", params={}):
     if service == "pushover":
@@ -74,16 +82,16 @@ class ColabHelper:
       os.mkdir(target_fpath.parent)
     subprocess.run(["cp", "-af", source, target]) # v for verbose
 
-  def tensorboard_backup(self, tensorboard_logdir="./runs/"):
+  def tensorboard_backup(self, tensorboard_logdir="runs"):
     """Make a backup of the log dir used by tensorboard given as input to 
       the specified tensorboard_backup_p folder"""
 
     self._copy_folder_content(tensorboard_logdir,self.tensorboard_backup_p)
 
-  def tensorboard_restore(self, tensorboard_logdir="./runs/"):
+  def tensorboard_restore(self, tensorboard_logdir="runs"):
     """Restore a backup of the log dir tensorboard into the given path from 
       the gdrive folder tensorboard_backup_p folder"""
-      
+    print("[INFO] To start tensorboard you can execute the following 2 lines:\n\%load_ext tensorboard\n\%tensorboard --logdir ",tensorboard_logdir)
     self._copy_folder_content(self.tensorboard_backup_p, tensorboard_logdir)
   
   @staticmethod
