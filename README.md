@@ -18,7 +18,7 @@ if not os.path.isdir('./ColabHelper'):
 from ColabHelper.colabhelper import ColabHelper
 ```
 
-## Tensorboard easy backup/restor from Google Drive
+## Tensorboard easy backup/restore to/from Google Drive
 ```python
 ch = ColabHelper(tensorboard_backup_p="/content/drive/My Drive/<YOUR_CUSTOM_FOLDER_IN_DRIVE>")
 
