@@ -74,7 +74,7 @@ ch.get_hdd_usage()
 ch.get_ram_usage()
 ```
 
-## Save (both local and remote) a copy of a dataframe and restore it
+## Save (both locally and remotely) a copy of a dataframe and restore it
 ```python
 import pandas
 
