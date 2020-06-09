@@ -1,5 +1,6 @@
 from google.colab import drive
 from google.colab import output
+from google.colab import auth
 
 import os
 import time
@@ -12,6 +13,11 @@ from distutils.dir_util import copy_tree
 from shutil import copyfile
 
 import functools
+
+#gsheet export
+import gspread
+from gspread_dataframe import get_as_dataframe, set_with_dataframe
+from oauth2client.client import GoogleCredentials
 
 class ColabHelper:
   """ Class useful to improved Colab capabilities"""
@@ -154,6 +160,32 @@ class ColabHelper:
         raise ColabHelperException("You need to set the parameters of the service as first. Use set_notification_params method for that.")
       self._pushover_send_msg(message)
     
+  def export_dataframe_to_gsheet(self, df, name):
+    """Export a dataframe to a new google sheet. 
+    
+    param
+      df:   dataframe to be exported as sheet
+      name: name that will be given to the sheet and to the worksheet 
+            that will be *created* on google sheet.
+            
+    note
+      you can't never overwrite a google sheet,
+      every time this method is called a new sheet is created.
+    """
+    
+    auth.authenticate_user()
+    default_app = GoogleCredentials.get_application_default()
+    gc = gspread.authorize(default_app)
+    # HP: auth ok
+    spreadsheet_name = name
+    worksheet_output = name
+    # Note: a new sheet is always created, there is no overwriting
+    spreadsheet = gc.create(spreadsheet_name)
+    spreadsheet.add_worksheet(worksheet_output, 1, 1)
+    spreadsheet = gc.open(spreadsheet_name)
+    worksheet_out = spreadsheet.worksheet(title=worksheet_output)
+    set_with_dataframe(worksheet_out, df)
+    
   def backup_dataframe(self, df, name):
     """Save a local and remote copy of the input dataframe.
     Creates the folder if it doesnt exist.
@@ -170,7 +202,6 @@ class ColabHelper:
     remote_backup = os.path.join(self.dataframes_backup_p, name+".pkl")
     self._copy_file(local_backup, remote_backup)
     #, remote_path="/content/drive/My Drive/dataframes", local_path="./dataframes/"
-
 
   def restore_dataframe(self, name):
     """Restore a remote copy of the input dataframe.
