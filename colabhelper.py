@@ -215,9 +215,9 @@ class ColabHelper:
     if not os.path.isdir(folder_path):
       os.mkdir(folder_path)
     
-    torch.save(model.state_dict(), file_path)
+    torch.save({'state_dict': model.state_dict()}, file_path)
     
-  def torch_model_state_restore(self, model_name):
+  def torch_model_state_restore(self, model, model_name):
     """Restore a model state from <backup_folder>/models_states/ .
     
     param:
@@ -234,8 +234,11 @@ class ColabHelper:
     folder_path = os.path.join(self.backup_folder, model_folder)
     file_path = os.path.join(folder_path, model_file_name)
     
-    model = torch.load(file_path)
-    return model.eval()
+    state_dict = torch.load(file_path)['state_dict']
+    model.load_state_dict(state_dict)
+
+    #model.load(file_path)
+    #model.eval()
     
   def backup_dataframe(self, df, name):
     """Save a local and remote copy of the input dataframe.
