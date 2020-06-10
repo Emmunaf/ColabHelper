@@ -1,5 +1,6 @@
 # ColabHelper
 A wrapper useful to improve your productivity with Colab.
+
 The module contains some utilities for an improved experience with Colab, like persistency of tensoboard log or dataframes by using your free google drive, encapsulated in the ColabHelper class.
 
 You can play and test the usage examples by visiting this [Google Colab notebook :orange_book:](https://colab.research.google.com/drive/1zC2lNhCVe0HNXEviVbDariIlC0TOsxVM?usp=sharing).
@@ -64,7 +65,7 @@ ch = ColabHelper()
 pushover_params = {"user_token":"<YOUR_USER_TOKEN>", "app_token":"<YOUR_APP_TOKEN>"}
 ch.set_notification_params(service="pushover", pushover_params)
 # ... run some time intensive job
-ch.notify(notification_type="DONE", extra="Experiment XYZ!") # leads to ->  [<DONE>]\n<Extra>
+ch.notify(notification_type="DONE", extra="Experiment XYZ!") # leads to ->  [<notification_type>]\n<Extra>
 ```
 
 ## :computer: Print information about the runtime
