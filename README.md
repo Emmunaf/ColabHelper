@@ -2,16 +2,16 @@
 A wrapper useful to work with Colab, but some of the methods like pushover notification should work on any jupyter notebook.
 The module contains some utilities for an improved experience with Colab, like persistency of tensoboard log or dataframes by using your free google drive, encapsulated in the ColabHelper class.
 
-You can look at some live example by visiting this [Google Colab notebook](https://colab.research.google.com/drive/1zC2lNhCVe0HNXEviVbDariIlC0TOsxVM?usp=sharing).
+You can look at some live example by visiting this [Google Colab notebook :orange_book:](https://colab.research.google.com/drive/1zC2lNhCVe0HNXEviVbDariIlC0TOsxVM?usp=sharing).
 # Features
 As of now the module is able to help in the following scenarios:
-- Easily backup/restore the tensorboard log directory to your google drive
-- Get information about the hosting machine (CPU, RAM, HDD, GPU)
-- Play a sound notification to alert you when a job is done
-- Get a custom notification with your [Pushover](https://pushover.net/) API (in future could be nice to support other services) useful to have some sort of notification also when you are away from PC.
+- :white_check_mark: Easily backup/restore the tensorboard log directory to your google drive
+- :white_check_mark: Get information about the hosting machine (CPU, RAM, HDD, GPU)
+- :white_check_mark: Play a sound notification to alert you when a job is done
+- :white_check_mark: Get a custom notification with your [Pushover](https://pushover.net/) API (in future could be nice to support other services) useful to have some sort of notification also when you are away from PC.
 
 # Usage
-## Import module on colab notebook
+## :one: Import module on colab notebook
 ```python
 import os
 if not os.path.isdir('./ColabHelper'):
@@ -20,7 +20,7 @@ if not os.path.isdir('./ColabHelper'):
 from ColabHelper.colabhelper import ColabHelper
 ```
 
-## Tensorboard easy backup/restore to/from Google Drive
+## :floppy_disk: Tensorboard easy backup/restore to/from Google Drive
 To make a backup you can use the following snippet:
 ```python
 ch = ColabHelper(backup_folder="/content/drive/My Drive/MyProjectFolder/")
@@ -45,7 +45,7 @@ ch.tensorboard_restore()
 The logs are saved in a subfolder of *backup_folder* called by default *runs*.
 You can change this bahaviour and set a custom subfolder name by calling set_tensorboard_backup_folder_name(newname).
 BTW this is not suggested, when you have many files a better idea is to change *backup_folder* for each new project and then mantaining the same internal structure.
-## Generate sound notification
+## :mega: Generate sound notification
 ```python
 ch = ColabHelper()
 
@@ -53,7 +53,7 @@ ch = ColabHelper()
 ch.beep(times=3)
 ```
 
-## Send a push notification by using third party services
+## :calling: Send a push notification by using third party services
 ```python
 ch = ColabHelper()
 
@@ -65,7 +65,7 @@ ch.set_notification_params(service="pushover", pushover_params)
 ch.notify(notification_type="DONE", extra="Experiment XYZ!") # leads to ->  [<DONE>]\n<Extra>
 ```
 
-## Print information about the runtime
+## :computer: Print information about the runtime
 ```python
 ch = ColabHelper()
 
@@ -76,7 +76,7 @@ ch.get_hdd_usage()
 ch.get_ram_usage()
 ```
 
-## Save (both locally and remotely) a copy of a dataframe and restore it
+## :panda_face: Save (both locally and remotely) a copy of a dataframe and restore it
 ```python
 import pandas
 
