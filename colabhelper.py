@@ -194,6 +194,9 @@ class ColabHelper:
     param:
     model: the model which state should be saved.
     model_name: the name of the generated file required for restoring.
+    
+    Note: this supports pythorch only as of now.
+    this uses the torch.save() to generate the output.
     """
     
     model_file_name = model_name
@@ -204,6 +207,25 @@ class ColabHelper:
       os.mkdir(folder_path)
     
     torch.save(model.state_dict(), file_path)
+    
+  def restore_model_state(self, model, model_name):
+    """Restore a model state from <backup_folder>/models_states/ .
+    
+    param:
+    model: the model which state should be loaded.
+    model_name: the name of the model state to restore.
+    
+    Note: this supports pythorch only as of now.
+    this uses the torch.load() to restore a saved state.
+    """
+    
+    model_file_name = model_name
+    model_folder = "models_states"
+    folder_path = os.path.join(self.backup_folder, model_folder)
+    file_path = os.path.join(folder_path, model_file_name)
+    # Model class must be defined somewhere
+    model = torch.load(file_path)
+    model.eval()
     
   def backup_dataframe(self, df, name):
     """Save a local and remote copy of the input dataframe.
