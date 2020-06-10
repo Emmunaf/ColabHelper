@@ -2,7 +2,7 @@
 A wrapper useful to work with Colab, but some of the methods like pushover notification should work on any jupyter notebook.
 The module contains some utilities for an improved experience with Colab, like persistency of tensoboard log or dataframes by using your free google drive, encapsulated in the ColabHelper class.
 
-You can look at some live example by visiting this [Google Colab notebook :orange_book:](https://colab.research.google.com/drive/1zC2lNhCVe0HNXEviVbDariIlC0TOsxVM?usp=sharing).
+You can play and test the usage examples by visiting this [Google Colab notebook :orange_book:](https://colab.research.google.com/drive/1zC2lNhCVe0HNXEviVbDariIlC0TOsxVM?usp=sharing).
 # Features
 As of now the module is able to help in the following scenarios:
 - :white_check_mark: Easily backup/restore the tensorboard log directory to your google drive
