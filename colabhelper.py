@@ -26,6 +26,8 @@ class ColabHelper:
     
     tensorboard_logs_folder = "runs"
     dataframes_folder = "dataframes"
+    if not backup_folder.startswith("/content/drive/"):
+      backup_folder = F"/content/gdrive/My Drive/{backup_folder}" 
     self.backup_folder = backup_folder
     self.tensorboard_backup_p = os.path.join(backup_folder, tensorboard_logs_folder)
     self.dataframes_backup_p = os.path.join(backup_folder, dataframes_folder)
@@ -185,6 +187,23 @@ class ColabHelper:
     spreadsheet = gc.open(spreadsheet_name)
     worksheet_out = spreadsheet.worksheet(title=worksheet_output)
     set_with_dataframe(worksheet_out, df)
+    
+  def backup_model_state(self, model, model_name):
+    """Save a model state to <backup_folder>/models_states/ .
+    
+    param:
+    model: the model which state should be saved.
+    model_name: the name of the generated file required for restoring.
+    """
+    
+    model_file_name = model_name
+    model_folder = "models_states"
+    folder_path = os.path.join(self.backup_folder, model_folder)
+    file_path = os.path.join(folder_path, model_file_name)
+    if not os.path.isdir(folder_path):
+      os.mkdir(folder_path)
+    
+    torch.save(model.state_dict(), file_path)
     
   def backup_dataframe(self, df, name):
     """Save a local and remote copy of the input dataframe.
