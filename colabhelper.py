@@ -1,6 +1,7 @@
 from google.colab import drive
 from google.colab import output
 from google.colab import auth
+from google.colab import files  # Required for downloading file from colab
 
 import os
 import time
@@ -19,8 +20,11 @@ import gspread
 from gspread_dataframe import get_as_dataframe, set_with_dataframe
 from oauth2client.client import GoogleCredentials
 
+# Note: To save the state of the models, maybe just using pickle without using torch?
+import torch
+
 class ColabHelper:
-  """ Class useful to improved Colab capabilities"""
+  """ Improve Colab productivity by reducing the amount of code you need for everything you need."""
 
   def __init__(self, model_state_p=None, backup_folder="/content/drive/My Drive/ColabHelper/"):
     
@@ -126,6 +130,11 @@ class ColabHelper:
     """ Print CPU model (!cat /proc/cpuinfo)"""
     print(subprocess.Popen("cat /proc/cpuinfo", shell=True, stdout=subprocess.PIPE).stdout.read().decode())
   
+  @staticmethod
+  def download_from_colab(colab_path="sample_data/README.md"):
+    """ Download a file from Colab."""
+    files.download(colab_path) 
+    
   def _pushover_send_msg(self, message):
     conn = http.client.HTTPSConnection("api.pushover.net:443")
     conn.request("POST", "/1/messages.json",
@@ -188,7 +197,7 @@ class ColabHelper:
     worksheet_out = spreadsheet.worksheet(title=worksheet_output)
     set_with_dataframe(worksheet_out, df)
     
-  def backup_model_state(self, model, model_name):
+  def torch_model_state_backup(self, model, model_name):
     """Save a model state to <backup_folder>/models_states/ .
     
     param:
@@ -208,7 +217,7 @@ class ColabHelper:
     
     torch.save(model.state_dict(), file_path)
     
-  def restore_model_state(self, model, model_name):
+  def torch_model_state_restore(self, model, model_name):
     """Restore a model state from <backup_folder>/models_states/ .
     
     param:
